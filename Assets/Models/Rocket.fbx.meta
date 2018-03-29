@@ -13,7 +13,22 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Cube.001
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rocket
+    second: {fileID: 2100000, guid: 17b1a09d11438fa4f97d7c3ea658dfef, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RocketTop
+    second: {fileID: 2100000, guid: 15cb509472be09e4e9e504eb3963bbbc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wings
+    second: {fileID: 2100000, guid: fdf402520fcbc3e43af1b2e0dd30e0f6, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
