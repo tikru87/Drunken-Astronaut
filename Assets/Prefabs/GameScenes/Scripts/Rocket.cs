@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Rocket : MonoBehaviour {
 
@@ -19,11 +20,17 @@ public class Rocket : MonoBehaviour {
 		[SerializeField]float mainThrust = 50f;
 		[SerializeField] static float timeToLoadScene = 3f;
 
+		[SerializeField] float maxFuel = 50f;
+		[SerializeField] float fuel;
+
+		[SerializeField] Image fuelBar;
+
 	
 	// Use this for initialization
 	void Start () {
 		rB = GetComponent<Rigidbody>();
 		aS = GetComponent<AudioSource>();
+		fuel = maxFuel;
 	}
 
 	private void LoadNextScene()
@@ -62,6 +69,7 @@ public class Rocket : MonoBehaviour {
     private void StartSuccesSequence()
     {
         state = State.Transcending;
+		engineParticle.Stop();
 		succeedParticle.Play();
         Invoke("LoadNextScene", timeToLoadScene);
     }
@@ -79,13 +87,27 @@ public class Rocket : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-		if (state == State.Alive)
+		if (state == State.Alive && fuel > 0)
 		{
 		RespondToThrustInput();
 		RespondToRotateInput();
+		HandleFuel();
 		}
 	}
 
+	private void HandleFuel()
+	{
+		if(aS.isPlaying && aS.clip == engine)
+		{
+			fuel -= Time.deltaTime * 10;
+			fuelBar.fillAmount = fuel / maxFuel;
+		}
+
+		if (fuel <=0 )
+		{
+			StartDeathSequence();
+		}
+	}
 	private void RespondToThrustInput()
     {
         ApplyThrust();
@@ -93,7 +115,7 @@ public class Rocket : MonoBehaviour {
 
     private void ApplyThrust()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && maxFuel >= 0)
         {
             if (rB.velocity.y <= maxVelocity)
             {
@@ -121,7 +143,7 @@ public class Rocket : MonoBehaviour {
 
     private void RespondToRotateInput()
 	{
-		rB.freezeRotation = true;
+		rB.angularVelocity = Vector3.zero;
 		
 		if (Input.GetKey(KeyCode.A))
 		{
